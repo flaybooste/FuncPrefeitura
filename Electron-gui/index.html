@@ -1,0 +1,130 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="./static/styles/main.css" />
+</head>
+
+<body>
+  <div id="app">
+    <section class="section">
+      <nav id="nav" class="navbar">
+        <button type="button" onclick="fechar()" class="btn btn-link ml-auto mr-1">X</button>
+      </nav>
+      <div class="form-group">
+        <input type="text" class="form-control" v-model="txt" @change="search" placeholder="Nome" />
+      </div>
+      <div class="">
+        <table id="tabela" class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th><abbr title="id">id</abbr></th>
+              <th>Nome</th>
+              <th><abbr title="competencia">Competencia</abbr></th>
+              <th><abbr title="lotacao">Lotação</abbr></th>
+              <th><abbr title="cargo">Cargo</abbr></th>
+              <th><abbr title="salariobase">Base</abbr></th>
+              <th><abbr title="proventos">Proventos</abbr></th>
+              <th><abbr title="vantagens">Vantagens</abbr></th>
+              <th><abbr title="vencimentos">Vencimentos</abbr></th>
+              <th><abbr title="descontos">Descontos</abbr></th>
+              <th><abbr title="liquido">Líquido</abbr></th>
+            </tr>
+          </thead>
+          <tbody v-for="todo in todos">
+            <tr>
+              <th scope="row"></th>
+              <td>{{todo.nome}}</td>
+              <td>{{todo.competencia}}</td>
+              <td>{{todo.lotacao}}</td>
+              <td>{{todo.cargo}}</td>
+              <td>{{todo.salariobase}}</td>
+              <td>{{todo.proventos}}</td>
+              <td>{{todo.vantagens}}</td>
+              <td>{{todo.vencimentos}}</td>
+              <td>{{todo.descontos}}</td>
+              <td>{{todo.liquido}}</td>
+            </tr>
+          </tbody>
+      </div>
+      </table>
+  </div>
+  </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: "#app",
+      data: {
+        txt: '',
+        allFunc: [],
+        todos: [],
+        pesq: []
+      },
+      //metodos
+      methods: {
+        search: function() {
+          var x = 0 // contador para saber qual posição do array está
+          if (this.txt != "") {
+          return this.todos.filter((item) => {
+            if (item.nome.indexOf(this.txt) > -1) {
+              console.log(item.nome + " " + x)
+              x += 1
+              this.pesq.push(item)
+              console.log(this.pesq)
+              this.todos = this.pesq
+            } else {
+              x += 1
+            }
+
+          })
+        }else{
+            this.todos = this.allFunc
+        }
+        }
+      },
+      ready() {
+        this.todos = allFunc
+      }
+    })
+
+    const {
+      ipcRenderer
+    } = require("electron");
+    const {
+      MongoClient
+    } = require("mongodb");
+
+    let all = []
+
+    async function getAll() {
+      let client = new MongoClient("mongodb://localhost:27017/folhapagamento");
+      let clien = await client.connect();
+      let db = client.db("folhapagamento");
+      let resul = await db.collection("folhapag").find({}).toArray();
+      return resul;
+    }
+    window.onload = funcionarios;
+    async function funcionarios() {
+      ipcRenderer
+        .invoke("clicou", {
+          nome: "luis eduardo"
+        })
+        .then(async (result) => {
+          let todosServidores = await getAll()
+          app.allFunc = todosServidores;
+          app.todos = app.allFunc
+        });
+    }
+
+    function fechar() {
+      ipcRenderer
+        .invoke("fechar", "teste")
+        .then(async (result) => {
+          console.log("fechou")
+        });
+    }
+  </script>
+
+</html>

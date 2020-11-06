@@ -1,0 +1,20 @@
+{
+  "name": "electron-gui",
+  "version": "1.0.0",
+  "description": "Electro-gui for funcprefeitura",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Flaybooste",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.3",
+    "electron": "^10.1.5",
+    "electron-reload": "^1.5.0",
+    "mongodb": "^3.6.3",
+    "roboto-fontface": "^0.10.0",
+    "sass": "^1.29.0"
+  }
+}
